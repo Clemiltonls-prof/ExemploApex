@@ -1,9 +1,12 @@
-List<String> nomes = new List<String>{'Thyago Sales', 'Adriana', 'Átila', 'Taty','Klebya'};
-List<Decimal> rendaPessoal = new List<Decimal>{3200,4500,2000,3000,2500};
-List<Decimal> rendaFamiliar = new List<Decimal>{2000,5000,3200,1600,5000};
-List<Decimal> despesasAlimentacao = new List<Decimal>{1500,1800,1000,1500,1300};
-List<Decimal> despesasOutras = new List<Decimal>{150,500,1000,100,2000};
-  
+Map<String,List<Decimal>> alunos = new Map<String,List<Decimal>>{
+    // Assumindo que sempre será nesta ordem:
+    // Nome => List<Decimal>{rendaPessoal,rendaFamiliar,despesasAlimentacao,outrasDepesas}
+    'Thyago Sales' => new List<Decimal>{3200,2000,1500,150},
+    'Adriana' => new List<Decimal>{4500,5000,1800,500},
+    'Átila' => new List<Decimal>{2000,3200,1000,1000},
+    'Taty' => new List<Decimal>{3000,1600,1500,100},
+    'Klebya' => new List<Decimal>{2500,5000,1300,2000}
+};
 Decimal percentual(Decimal total, Decimal restricao){
     return ((restricao*100)/total).setScale(2);
 }
@@ -11,18 +14,19 @@ Decimal percentual(Decimal total, Decimal restricao){
 Integer alunosGastandoDemais = 0;
 // Guarda a quantidade de alunos que ganham mais que a renda Familiar.
 Integer alunosGanhandoBem = 0; 
-
-for(Integer i = 0; i < nomes.size(); i++){
-    if(despesasOutras.get(i) > 200){
+for(String nome : alunos.keySet()){
+    if(alunos.get(nome).get(3) > 200){
         alunosGastandoDemais++;
     }
-    if(rendaPessoal.get(i) > rendaFamiliar.get(i)){
+    if(alunos.get(nome).get(0) > alunos.get(nome).get(1)){
         alunosGanhandoBem++;
     }
-    exibirDados(nomes.get(i),rendaPessoal.get(i),rendaFamiliar.get(i),despesasAlimentacao.get(i),despesasOutras.get(i));
+    exibirDados(nome,alunos.get(nome).get(0),alunos.get(nome).get(1),alunos.get(nome).get(2),alunos.get(nome).get(3));
 }
-System.debug('Percentual de alunos gastando mais que 200 com outras despesas: ' + percentual(nomes.size(),alunosGastandoDemais));
+System.debug('Percentual de alunos gastando mais que 200 com outras despesas: ' + 
+             percentual(alunos.keySet().size(),alunosGastandoDemais));
 System.debug('Quantidade de alunos ganhando mais que a família: ' + alunosGanhandoBem);
+
 void exibirDados(String aluno, Decimal rP, Decimal rF, Decimal dA, Decimal dOu){
     // Armazena temporariamente os ganhos totais
 	Decimal ganhosTotais = 0;
@@ -40,6 +44,3 @@ void exibirDados(String aluno, Decimal rP, Decimal rF, Decimal dA, Decimal dOu){
     System.debug('Percentual de Despesas: ' + percentual(ganhosTotais,gastosTotais) + '%');
     System.debug('--------------------------------------------');
 }
-/*
-
-*/
